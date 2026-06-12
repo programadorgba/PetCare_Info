@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PetCare - Gestión Veterinaria Inteligente</title>
+  <style>
+    :root {
+      --primary: #4A90D9;
+      --primary-dark: #3A7BC8;
+      --secondary: #7B68EE;
+      --accent: #FF6B9D;
+      --bg-dark: #0F1419;
+      --bg-card: #1A2332;
+      --text: #E8EAED;
+      --text-muted: #9AA0A6;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 30%, rgba(74, 144, 217, 0.15) 0%, transparent 50%),
+                  radial-gradient(circle at 70% 70%, rgba(123, 104, 238, 0.1) 0%, transparent 50%);
+      animation: float 20s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      50% { transform: translate(2%, 2%) rotate(1deg); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+    }
+
+    .logo {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1.5rem;
+    }
+
+    .tagline {
+      font-size: 1.5rem;
+      color: var(--text-muted);
+      margin-bottom: 3rem;
+      line-height: 1.6;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin: 3rem 0;
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 2rem;
+      text-align: left;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(74, 144, 217, 0.2);
+    }
+
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-card h3 {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+      color: var(--text);
+    }
+
+    .feature-card p {
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .roles-section {
+      display: flex;
+      gap: 2rem;
+      margin: 4rem 0;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .role-card {
+      background: linear-gradient(135deg, var(--bg-card), rgba(74, 144, 217, 0.1));
+      border-radius: 20px;
+      padding: 2.5rem;
+      flex: 1;
+      min-width: 300px;
+      max-width: 400px;
+      border: 1px solid rgba(74, 144, 217, 0.2);
+    }
+
+    .role-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .role-card ul {
+      list-style: none;
+      text-align: left;
+    }
+
+    .role-card li {
+      padding: 0.5rem 0;
+      padding-left: 1.5rem;
+      position: relative;
+      color: var(--text-muted);
+    }
+
+    .role-card li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+    }
+
+    .cta-section {
+      margin-top: 3rem;
+      padding: 3rem;
+      background: var(--bg-card);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .cta-section h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .cta-section p {
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+
+    .tech-stack {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+
+    .tech-badge {
+      background: rgba(74, 144, 217, 0.2);
+      color: var(--primary);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .footer {
+      margin-top: 4rem;
+      padding: 2rem;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    @media (max-width: 768px) {
+      h1 { font-size: 2.5rem; }
+      .tagline { font-size: 1.2rem; }
+      .roles-section { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="hero-content">
+      <div class="logo">🐾</div>
+      <h1>PetCare</h1>
+      <p class="tagline">La plataforma integral para la gestión veterinaria de tus mascotas. Control total desde cualquier dispositivo.</p>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📋</div>
+          <h3>Historial Médico Centralizado</h3>
+          <p>Cada visita, diagnóstico y tratamiento queda registrado de forma organizada. Accede al historial completo de tu mascota en cualquier momento.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">💊</div>
+          <h3>Gestión de Medicaciones</h3>
+          <p>Control total sobre las medicaciones prescritas: dosis, frecuencia, duración y tomas con o sin alimentos.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🔍</div>
+          <h3>Búsqueda por Chip</h3>
+          <p>Los veterinarios pueden localizar cualquier mascota registrada mediante su número de microchip de forma rápida y segura.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📅</div>
+          <h3>Recordatorios Inteligentes</h3>
+          <p>No pierdas ninguna vacuna, desparasitación o revisión. El sistema te recuerda las próximas citas automáticamente.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📸</div>
+          <h3>Imágenes Diagnósticas</h3>
+          <p>Adjunta radiografías, ecografías y otros estudios diagnósticos directamente a cada visita para tener todo integrado.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h3>Seguridad y Privacidad</h3>
+          <p>Row Level Security garantiza que cada usuario solo acceda a la información que le corresponde. Los datos están protegidos.</p>
+        </div>
+      </div>
+
+      <div class="roles-section">
+        <div class="role-card">
+          <h3>👤 Para Propietarios</h3>
+          <ul>
+            <li>Registrar y gestionar tus mascotas</li>
+            <li>Solicitar citas para revisión</li>
+            <li>Ver el historial médico completo</li>
+            <li>Configurar recordatorios</li>
+            <li>Gestionar seguros y alergias</li>
+          </ul>
+        </div>
+
+        <div class="role-card">
+          <h3>🩺 Para Veterinarios</h3>
+          <ul>
+            <li>Buscar mascotas por número de chip</li>
+            <li>Crear y completar visitas</li>
+            <li>Registrar diagnósticos y tratamientos</li>
+            <li>Añadir medicaciones e imágenes</li>
+            <li>Firmar y cerrar visitas</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cta-section">
+        <h2>Construido con tecnología moderna</h2>
+        <p>PetCare utiliza las mejores herramientas para garantizar rendimiento, seguridad y una experiencia de usuario excepcional.</p>
+        <div class="tech-stack">
+          <span class="tech-badge">React</span>
+          <span class="tech-badge">Supabase</span>
+          <span class="tech-badge">PostgreSQL</span>
+          <span class="tech-badge">Row Level Security</span>
+          <span class="tech-badge">Autenticación</span>
+          <span class="tech-badge">Storage</span>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <p>PetCare v2.0 — Sistema de gestión veterinaria</p>
+      </footer>
+    </div>
+  </section>
+</body>
+</html>

@@ -1,0 +1,754 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+            name="description"
+            content="PetCare: Plataforma integral de gestión veterinaria. Historial médico, recordatorios de vacunas y búsqueda por chip para propietarios y clínicas veterinarias."
+        />
+        <title>PetCare - Gestión Veterinaria Inteligente</title>
+        <style>
+               :root {
+                 --primary: #4A90D9;
+                 --primary-dark: #3A7BC8;
+                 --secondary: #7B68EE;
+                 --accent: #FF6B9D;
+                 --bg-dark: #0F1419;
+                 --bg-card: #1A2332;
+                 --text: #E8EAED;
+                 --text-muted: #B0B8C1; /* Mejorado para mejor contraste y legibilidad */
+               }
+
+               * {
+                 margin: 0;
+                 padding: 0;
+                 box-sizing: border-box;
+               }
+
+               html {
+                 scroll-behavior: smooth;
+               }
+
+               body {
+                 font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+                 background: var(--bg-dark);
+                 color: var(--text);
+                 min-height: 100vh;
+                 overflow-x: hidden;
+                 line-height: 1.6;
+               }
+
+               /* Accesibilidad: Estado de foco visible */
+               :focus-visible {
+                 outline: 2px solid var(--primary);
+                 outline-offset: 4px;
+                 border-radius: 4px;
+               }
+
+               /* --- NAVBAR --- */
+               .navbar {
+                 position: fixed;
+                 top: 0;
+                 left: 0;
+                 right: 0;
+                 z-index: 1000;
+                 background: rgba(15, 20, 25, 0.85);
+                 backdrop-filter: blur(12px);
+                 -webkit-backdrop-filter: blur(12px);
+                 border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                 padding: 1rem 2rem;
+                 transition: all 0.3s ease;
+               }
+
+               .nav-container {
+                 max-width: 1200px;
+                 margin: 0 auto;
+                 display: flex;
+                 justify-content: space-between;
+                 align-items: center;
+               }
+
+               .nav-logo {
+                 font-weight: 700;
+                 font-size: 1.4rem;
+                 color: var(--text);
+                 text-decoration: none;
+                 display: flex;
+                 align-items: center;
+                 gap: 0.5rem;
+               }
+
+               .nav-links {
+                 display: flex;
+                 gap: 2rem;
+               }
+
+               .nav-links a {
+                 color: var(--text-muted);
+                 text-decoration: none;
+                 font-size: 0.95rem;
+                 font-weight: 500;
+                 transition: color 0.3s;
+               }
+
+               .nav-links a:hover {
+                 color: var(--primary);
+               }
+
+               .nav-actions {
+                 display: flex;
+                 gap: 1rem;
+               }
+
+               .btn {
+                 display: inline-flex;
+                 align-items: center;
+                 justify-content: center;
+                 padding: 0.6rem 1.2rem;
+                 border-radius: 8px;
+                 text-decoration: none;
+                 font-weight: 600;
+                 font-size: 0.9rem;
+                 transition: all 0.3s ease;
+                 cursor: pointer;
+                 border: none;
+               }
+
+               .btn-primary {
+                 background: var(--primary);
+                 color: white;
+               }
+
+               .btn-primary:hover {
+                 background: var(--primary-dark);
+                 transform: translateY(-2px);
+                 box-shadow: 0 4px 12px rgba(74, 144, 217, 0.3);
+               }
+
+               .btn-ghost {
+                 color: var(--text);
+                 background: transparent;
+                 border: 1px solid rgba(255, 255, 255, 0.15);
+               }
+
+               .btn-ghost:hover {
+                 background: rgba(255, 255, 255, 0.05);
+                 border-color: rgba(255, 255, 255, 0.3);
+               }
+
+               .btn-large {
+                 padding: 1rem 2rem;
+                 font-size: 1.1rem;
+               }
+
+               /* --- HERO --- */
+               .hero {
+                 min-height: 100vh;
+                 display: flex;
+                 flex-direction: column;
+                 align-items: center;
+                 justify-content: center;
+                 text-align: center;
+                 padding: 8rem 2rem 4rem; /* Padding top aumentado por el navbar fijo */
+                 position: relative;
+                 overflow: hidden;
+               }
+
+               .hero::before {
+                 content: '';
+                 position: absolute;
+                 top: -50%;
+                 left: -50%;
+                 width: 200%;
+                 height: 200%;
+                 background: radial-gradient(circle at 30% 30%, rgba(74, 144, 217, 0.15) 0%, transparent 50%),
+                             radial-gradient(circle at 70% 70%, rgba(123, 104, 238, 0.1) 0%, transparent 50%);
+                 animation: float 20s ease-in-out infinite;
+                 pointer-events: none;
+               }
+
+               @keyframes float {
+                 0%, 100% { transform: translate(0, 0) rotate(0deg); }
+                 50% { transform: translate(2%, 2%) rotate(1deg); }
+               }
+
+               .hero-content {
+                 position: relative;
+                 z-index: 1;
+                 max-width: 900px;
+                 width: 100%;
+               }
+
+               .logo-icon {
+                 font-size: 4rem;
+                 margin-bottom: 1rem;
+                 display: inline-block;
+                 animation: bounce 2s infinite;
+               }
+
+               @keyframes bounce {
+                 0%, 100% { transform: translateY(0); }
+                 50% { transform: translateY(-10px); }
+               }
+
+               h1 {
+                 font-size: 3.5rem;
+                 font-weight: 800;
+                 background: linear-gradient(135deg, var(--primary), var(--secondary));
+                 -webkit-background-clip: text;
+                 -webkit-text-fill-color: transparent;
+                 background-clip: text;
+                 margin-bottom: 1.5rem;
+                 letter-spacing: -0.02em;
+               }
+
+               .tagline {
+                 font-size: 1.35rem;
+                 color: var(--text-muted);
+                 margin-bottom: 3rem;
+                 line-height: 1.6;
+                 max-width: 700px;
+                 margin-left: auto;
+                 margin-right: auto;
+               }
+
+               /* --- SECCIONES GENERALES --- */
+               section {
+                 padding: 4rem 2rem;
+                 max-width: 1200px;
+                 margin: 0 auto;
+               }
+
+               .section-title {
+                 text-align: center;
+                 font-size: 2.2rem;
+                 margin-bottom: 3rem;
+                 color: var(--text);
+               }
+
+               /* --- FEATURES GRID --- */
+               .features-grid {
+                 display: grid;
+                 grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                 gap: 1.5rem;
+                 margin: 3rem 0;
+                 width: 100%;
+               }
+
+               .feature-card {
+                 background: var(--bg-card);
+                 border-radius: 16px;
+                 padding: 2rem;
+                 text-align: left;
+                 border: 1px solid rgba(255, 255, 255, 0.05);
+                 transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+               }
+
+               .feature-card:hover {
+                 transform: translateY(-6px);
+                 box-shadow: 0 20px 40px rgba(74, 144, 217, 0.15);
+                 border-color: rgba(74, 144, 217, 0.3);
+               }
+
+               .feature-icon {
+                 font-size: 2.5rem;
+                 margin-bottom: 1rem;
+               }
+
+               .feature-card h3 {
+                 font-size: 1.25rem;
+                 margin-bottom: 0.75rem;
+                 color: var(--text);
+               }
+
+               .feature-card p {
+                 color: var(--text-muted);
+                 line-height: 1.6;
+                 font-size: 0.95rem;
+               }
+
+               /* --- ROLES SECTION --- */
+               .roles-section {
+                 display: flex;
+                 gap: 2rem;
+                 margin: 4rem 0;
+                 flex-wrap: wrap;
+                 justify-content: center;
+               }
+
+               .role-card {
+                 background: linear-gradient(135deg, var(--bg-card), rgba(74, 144, 217, 0.08));
+                 border-radius: 20px;
+                 padding: 2.5rem;
+                 flex: 1;
+                 min-width: 300px;
+                 max-width: 450px;
+                 border: 1px solid rgba(74, 144, 217, 0.2);
+                 transition: transform 0.3s ease;
+               }
+
+               .role-card:hover {
+                 transform: translateY(-4px);
+               }
+
+               .role-card h3 {
+                 font-size: 1.5rem;
+                 margin-bottom: 1.5rem;
+                 display: flex;
+                 align-items: center;
+                 gap: 0.75rem;
+                 color: var(--text);
+               }
+
+               .role-card ul {
+                 list-style: none;
+                 text-align: left;
+               }
+
+               .role-card li {
+                 padding: 0.6rem 0;
+                 padding-left: 1.5rem;
+                 position: relative;
+                 color: var(--text-muted);
+                 font-size: 1rem;
+               }
+
+               .role-card li::before {
+                 content: '→';
+                 position: absolute;
+                 left: 0;
+                 color: var(--primary);
+                 font-weight: bold;
+               }
+
+               /* --- CTA SECTION --- */
+               .cta-section {
+                 margin: 4rem auto;
+                 padding: 4rem 2rem;
+                 background: linear-gradient(180deg, var(--bg-card) 0%, rgba(26, 35, 50, 0.5) 100%);
+                 border-radius: 24px;
+                 border: 1px solid rgba(74, 144, 217, 0.3);
+                 text-align: center;
+                 max-width: 900px;
+                 position: relative;
+                 overflow: hidden;
+               }
+
+               .cta-section::before {
+                 content: '';
+                 position: absolute;
+                 top: 0;
+                 left: 50%;
+                 transform: translateX(-50%);
+                 width: 60%;
+                 height: 1px;
+                 background: linear-gradient(90deg, transparent, var(--primary), transparent);
+               }
+
+               .cta-section h2 {
+                 font-size: 2.2rem;
+                 margin-bottom: 1rem;
+                 color: var(--text);
+               }
+
+               .cta-section p {
+                 color: var(--text-muted);
+                 margin-bottom: 2.5rem;
+                 font-size: 1.1rem;
+                 max-width: 600px;
+                 margin-left: auto;
+                 margin-right: auto;
+               }
+
+               .cta-buttons {
+                 display: flex;
+                 gap: 1rem;
+                 justify-content: center;
+                 flex-wrap: wrap;
+                 margin-bottom: 3rem;
+               }
+
+               .tech-stack {
+                 display: flex;
+                 gap: 1rem;
+                 flex-wrap: wrap;
+                 justify-content: center;
+                 padding-top: 2rem;
+                 border-top: 1px solid rgba(255, 255, 255, 0.05);
+               }
+
+               .tech-badge {
+                 background: rgba(74, 144, 217, 0.15);
+                 color: var(--primary);
+                 padding: 0.5rem 1.2rem;
+                 border-radius: 20px;
+                 font-size: 0.85rem;
+                 font-weight: 600;
+                 border: 1px solid rgba(74, 144, 217, 0.2);
+               }
+
+               /* --- FOOTER --- */
+               .footer {
+                 margin-top: 4rem;
+                 padding: 3rem 2rem;
+                 border-top: 1px solid rgba(255, 255, 255, 0.05);
+                 text-align: center;
+                 color: var(--text-muted);
+                 font-size: 0.9rem;
+               }
+
+               .footer-links {
+                 display: flex;
+                 justify-content: center;
+                 gap: 2rem;
+                 margin-bottom: 1.5rem;
+                 flex-wrap: wrap;
+               }
+
+               .footer-links a {
+                 color: var(--text-muted);
+                 text-decoration: none;
+                 transition: color 0.3s;
+               }
+
+               .footer-links a:hover {
+                 color: var(--primary);
+               }
+
+               /* --- SCROLL REVEAL ANIMATIONS --- */
+               .scroll-reveal {
+                 opacity: 0;
+                 transform: translateY(30px);
+                 transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+               }
+
+               .scroll-reveal.visible {
+                 opacity: 1;
+                 transform: translateY(0);
+               }
+
+               /* Retraso en cascada para las tarjetas */
+               .feature-card:nth-child(1) { transition-delay: 0.1s; }
+               .feature-card:nth-child(2) { transition-delay: 0.2s; }
+               .feature-card:nth-child(3) { transition-delay: 0.3s; }
+               .feature-card:nth-child(4) { transition-delay: 0.4s; }
+               .feature-card:nth-child(5) { transition-delay: 0.5s; }
+               .feature-card:nth-child(6) { transition-delay: 0.6s; }
+
+               /* --- RESPONSIVE --- */
+               @media (max-width: 768px) {
+                 .nav-links { display: none; } /* En una app real, aquí iría un menú hamburguesa */
+                 h1 { font-size: 2.5rem; }
+                 .tagline { font-size: 1.1rem; }
+                 .roles-section { flex-direction: column; align-items: center; }
+                 .role-card { width: 100%; max-width: 100%; }
+                 .cta-buttons { flex-direction: column; width: 100%; }
+                 .btn-large { width: 100%; }
+                 .hero { padding-top: 7rem; }
+               }
+                /* Estilos para los botones de descarga y web app */
+    .btn-app {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.8rem 1.5rem;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .btn-web {
+      background: var(--primary);
+      color: white;
+      border: 1px solid var(--primary);
+    }
+
+    .btn-web:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(74, 144, 217, 0.3);
+    }
+
+    .btn-download {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-download:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--text-muted);
+      transform: translateY(-2px);
+    }
+
+    .app-badges {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+
+    .store-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: #000;
+      color: white;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .store-badge:hover {
+      background: #1a1a1a;
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .store-badge .icon {
+      font-size: 1.5rem;
+    }
+
+    .store-badge .text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .store-badge .text small {
+      font-size: 0.65rem;
+      color: #aaa;
+      text-transform: uppercase;
+    }
+
+    .store-badge .text span {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+      .hero .cta-buttons {
+        flex-direction: column;
+        width: 100%;
+      }
+      .btn-app {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+        </style>
+    </head>
+    <body>
+        <!-- BARRA DE NAVEGACIÓN -->
+        <header class="navbar">
+            <div class="nav-container">
+                <a href="#" class="nav-logo">🐾 PetCare</a>
+                <nav class="nav-links">
+                    <a href="#features">Características</a>
+                    <a href="#roles">Roles</a>
+                    <a href="#tech">Tecnología</a>
+                </nav>
+                <div class="nav-actions">
+                    <a href="#" class="btn btn-ghost">Iniciar Sesión</a>
+                    <a href="#" class="btn btn-primary">Registrarse</a>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <!-- HERO SECTION -->
+            <section class="hero">
+                <div class="hero-content">
+                    <div class="logo-icon">🐾</div>
+                    <h1>PetCare</h1>
+                    <p class="tagline">
+                        La plataforma integral para la gestión veterinaria de
+                        tus mascotas. Control total, historial médico y
+                        recordatorios inteligentes desde cualquier dispositivo.
+                    </p>
+
+        <div class="cta-buttons" style="margin-bottom: 4rem;">
+          <!-- Enlace a la aplicación Web -->
+          <a href="https://mascotas-c605.onrender.com" class="btn-app btn-web" target="_blank" rel="noopener noreferrer">
+            🌐 Usar Aplicación Web
+          </a>
+          <!-- Enlace a la descarga de la App -->
+          <a href="https://expo.dev/artifacts/eas/IpX7WpDF4Y2mOSJMsbpfLlEFTnFoCu-1v5KMC4sru4g.apk" class="btn-app btn-download">
+            📱 Descargar App Móvil
+          </a>
+        </div>
+                </div>
+            </section>
+
+            <!-- FEATURES SECTION -->
+            <section id="features">
+                <h2 class="section-title scroll-reveal">
+                    Todo lo que necesitas en un solo lugar
+                </h2>
+                <div class="features-grid">
+                    <div class="feature-card scroll-reveal">
+                        <div class="feature-icon">📋</div>
+                        <h3>Historial Médico Centralizado</h3>
+                        <p>
+                            Cada visita, diagnóstico y tratamiento queda
+                            registrado de forma organizada. Accede al historial
+                            completo de tu mascota en cualquier momento.
+                        </p>
+                    </div>
+
+                    <div class="feature-card scroll-reveal">
+                        <div class="feature-icon">💊</div>
+                        <h3>Gestión de Medicaciones</h3>
+                        <p>
+                            Control total sobre las medicaciones prescritas:
+                            dosis, frecuencia, duración y tomas con o sin
+                            alimentos.
+                        </p>
+                    </div>
+
+                    <div class="feature-card scroll-reveal">
+                        <div class="feature-icon">🔍</div>
+                        <h3>Búsqueda por Chip</h3>
+                        <p>
+                            Los veterinarios pueden localizar cualquier mascota
+                            registrada mediante su número de microchip de forma
+                            rápida y segura.
+                        </p>
+                    </div>
+
+                    <div class="feature-card scroll-reveal">
+                        <div class="feature-icon">📅</div>
+                        <h3>Recordatorios Inteligentes</h3>
+                        <p>
+                            No pierdas ninguna vacuna, desparasitación o
+                            revisión. El sistema te recuerda las próximas citas
+                            automáticamente.
+                        </p>
+                    </div>
+
+                    <div class="feature-card scroll-reveal">
+                        <div class="feature-icon">📸</div>
+                        <h3>Imágenes Diagnósticas</h3>
+                        <p>
+                            Adjunta radiografías, ecografías y otros estudios
+                            diagnósticos directamente a cada visita para tener
+                            todo integrado.
+                        </p>
+                    </div>
+
+                    <div class="feature-card scroll-reveal">
+                        <div class="feature-icon">🔒</div>
+                        <h3>Seguridad y Privacidad</h3>
+                        <p>
+                            Row Level Security garantiza que cada usuario solo
+                            acceda a la información que le corresponde. Tus
+                            datos están protegidos.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ROLES SECTION -->
+            <section id="roles">
+                <h2 class="section-title scroll-reveal">
+                    Diseñado para quienes cuidan de ellos
+                </h2>
+                <div class="roles-section">
+                    <div class="role-card scroll-reveal">
+                        <h3>👤 Para Propietarios</h3>
+                        <ul>
+                            <li>Registrar y gestionar tus mascotas</li>
+                            <li>Solicitar citas para revisión</li>
+                            <li>Ver el historial médico completo</li>
+                            <li>Configurar recordatorios de salud</li>
+                            <li>Gestionar seguros y alergias</li>
+                        </ul>
+                    </div>
+
+                    <div class="role-card scroll-reveal">
+                        <h3>🩺 Para Veterinarios</h3>
+                        <ul>
+                            <li>Buscar mascotas por número de chip</li>
+                            <li>Crear y completar visitas médicas</li>
+                            <li>Registrar diagnósticos y tratamientos</li>
+                            <li>Añadir medicaciones e imágenes</li>
+                            <li>Firmar y cerrar visitas digitalmente</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA & TECH SECTION -->
+            <section id="tech" class="cta-section scroll-reveal">
+                <h2>¿Listo para mejorar la salud de tus mascotas?</h2>
+                <p>
+                    Únete a cientos de clínicas y propietarios que ya confían en
+                    PetCare para gestionar el bienestar animal de forma moderna
+                    y segura.
+                </p>
+
+                <div class="cta-buttons">
+                    <a href="#" class="btn btn-primary btn-large"
+                        >Crear Cuenta Gratis</a
+                    >
+                    <a href="#" class="btn btn-ghost btn-large"
+                        >Contactar Ventas</a
+                    >
+                </div>
+
+                <div class="tech-stack">
+                    <span class="tech-badge">React</span>
+                    <span class="tech-badge">Supabase</span>
+                    <span class="tech-badge">PostgreSQL</span>
+                    <span class="tech-badge">Row Level Security</span>
+                    <span class="tech-badge">Cloud Storage</span>
+                </div>
+            </section>
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="footer-links">
+                <a href="#">Política de Privacidad</a>
+                <a href="#">Términos de Servicio</a>
+                <a href="#">Centro de Ayuda</a>
+                <a href="#">Contacto</a>
+            </div>
+            <p>
+                &copy; 2026 PetCare. Todos los derechos reservados. Sistema de
+                gestión veterinaria v2.0
+            </p>
+        </footer>
+
+        <!-- SCRIPT PARA ANIMACIONES AL HACER SCROLL -->
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const observerOptions = {
+                    root: null,
+                    rootMargin: "0px",
+                    threshold: 0.1,
+                };
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add("visible");
+                            observer.unobserve(entry.target); // Animar solo una vez
+                        }
+                    });
+                }, observerOptions);
+
+                // Seleccionar todos los elementos con la clase scroll-reveal
+                document.querySelectorAll(".scroll-reveal").forEach((el) => {
+                    observer.observe(el);
+                });
+            });
+        </script>
+    </body>
+</html>
